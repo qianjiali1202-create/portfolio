@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>案例 01 · 需求描述面板（Int UI 风格界面稿）</title>
+<!--
+  界面复刻自 JetBrains Int UI Kit（CC BY 4.0）
+  色值/尺寸取自 expUI_light.theme.json 与 JetBrains UI Guidelines
+  本文件为「方案示意」，不是真实产品截图
+-->
+<style>/* ============================================================
+   tokens.css —— 规范的唯一数值来源
+   本文件是 references/tokens.md 的代码形态，两者必须一致。
+   改数值：改 references/tokens.md，然后同步这里（或让我同步）。
+   任何页面、组件都只允许引用这里的变量，禁止写死数值。
+   ============================================================ */
+
+:root {
+  /* ---------- 1. 颜色 ---------- */
+  --color-brand-primary: #2B6CB0;
+  --color-brand-primary-hover: #24598F;
+  --color-brand-subtle: #EBF3FB;
+  --color-text-primary: #1A202C;
+  --color-text-secondary: #5A6472;
+  --color-text-tertiary: #8A93A0;
+  --color-text-on-brand: #FFFFFF;
+  --color-bg-page: #F7F8FA;
+  --color-bg-surface: #FFFFFF;
+  --color-bg-subtle: #EDEFF3;
+  --color-border-default: #DFE3E8;
+  --color-border-strong: #C4CAD3;
+  --color-success: #2F855A;
+  --color-success-subtle: #EAF6EF;
+  --color-warning: #B7791F;
+  --color-warning-subtle: #FDF6E7;
+  --color-danger: #C53030;
+  --color-danger-subtle: #FCECEC;
+
+  /* ---------- 2. 字体与字号 ---------- */
+  --font-family-base: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
+  --font-family-number: "SF Mono", "JetBrains Mono", monospace;
+  --font-size-h1: 28px;
+  --font-size-h2: 20px;
+  --font-size-h3: 16px;
+  --font-size-body: 14px;
+  --font-size-caption: 12px;
+  --line-height-tight: 1.3;
+  --line-height-base: 1.6;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+
+  /* ---------- 3. 间距（只有这 8 档） ---------- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  /* ---------- 4. 圆角 ---------- */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-full: 999px;
+
+  /* ---------- 5. 阴影（只有这 2 档） ---------- */
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06);
+  --shadow-md: 0 4px 12px rgba(16, 24, 40, 0.10);
+
+  /* ---------- 6. 组件尺寸 ---------- */
+  --height-control-lg: 40px;
+  --height-control-md: 32px;
+  --height-control-sm: 24px;
+  --border-width: 1px;
+  --content-max-width: 1120px;
+
+  /* ---------- 7. 断点（媒体查询用，非变量） ----------
+     窄屏 < 640px ｜ 中屏 640–1024px ｜ 宽屏 > 1024px
+  ------------------------------------------------------- */
+}
+</style>
+<style>/* ============================================================
+   主题-int-ui.css —— JetBrains Int UI（新界面）配色主题
+   ------------------------------------------------------------
+   用途：给组件库换一层皮肤，让复刻出的界面看起来像 IntelliJ 平台的产品界面。
+   用法：把内容包进 <div class="theme-intui ui-scope"> … </div>
+
+   数值来源（全部为官方公开数据，非推测）：
+   - 色值：intellij-community/platform/platform-resources/src/themes/expUI/expUI_light.theme.json
+   - 尺寸：同一文件的 ui.* 键（Component.arc=8、Button.minimumSize=72,28、
+           List.rowHeight=24、TabbedPane.tabHeight=40 等）
+   - 字体：JetBrains UI Guidelines「Typography」——Inter，默认 13，
+           H1 = 默认+5，H2 = 默认+3，Medium = 默认-1，段落行高 = 默认+3
+
+   授权：Int UI Kit 采用 CC BY 4.0。
+   复刻出的界面稿**必须标注**「界面基于 JetBrains Int UI Kit（CC BY 4.0）」。
+
+   注意：本主题只重定义变量，不改任何组件结构。组件库无需知道自己在穿哪套皮肤。
+   ============================================================ */
+
+.theme-intui {
+  /* ---------- 灰阶（官方 Gray1–Gray14） ---------- */
+  /* Gray1 #000000  Gray2 #27282E  Gray3 #383A42  Gray4 #494B57  Gray5 #5A5D6B
+     Gray6 #6C707E  Gray7 #818594  Gray8 #A8ADBD  Gray9 #C9CCD6  Gray10 #D3D5DB
+     Gray11 #DFE1E5 Gray12 #EBECF0 Gray13 #F7F8FA Gray14 #FFFFFF */
+
+  --color-brand-primary: #3574F0;          /* Blue4 · 官方强调色 */
+  --color-brand-primary-hover: #3369D6;    /* Blue3 */
+  --color-brand-subtle: #D4E2FF;           /* Blue11 · 聚焦底 / 选中浅底 */
+  --color-text-primary: #000000;           /* Gray1 */
+  --color-text-secondary: #6C707E;         /* Gray6 */
+  --color-text-tertiary: #818594;          /* Gray7 */
+  --color-text-on-brand: #FFFFFF;          /* Gray14 */
+  --color-bg-page: #F7F8FA;                /* Gray13 · 面板底（ToolWindow/StatusBar 同值） */
+  --color-bg-surface: #FFFFFF;             /* Gray14 · 内容区 / 输入框底 */
+  --color-bg-subtle: #EBECF0;              /* Gray12 · 悬停底 / 标签底 */
+  --color-border-default: #C9CCD6;         /* Gray9 · 组件描边 */
+  --color-border-subtle: #EBECF0;          /* Gray12 · 分隔线（Table.gridColor 同值） */
+  --color-border-strong: #A8ADBD;          /* Gray8 */
+  --color-success: #208A3C;                /* Green4 */
+  --color-success-subtle: #E3F7E7;         /* Green10 */
+  --color-warning: #A46704;                /* Yellow1 */
+  --color-warning-subtle: #FFF5DB;         /* Yellow9 */
+  --color-danger: #DB3B4B;                 /* Red4 */
+  --color-danger-subtle: #FFF2F3;          /* Red11 */
+
+  /* ---------- 字体与字号（Inter · 默认 13） ---------- */
+  --font-family-base: "Inter", -apple-system, "SF Pro Text", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  --font-family-number: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
+  --font-size-h1: 18px;                    /* 默认 + 5 */
+  --font-size-h2: 16px;                    /* 默认 + 3 */
+  --font-size-h3: 14px;
+  --font-size-body: 13px;                  /* 默认 */
+  --font-size-caption: 12px;               /* Medium = 默认 - 1 */
+  --line-height-tight: 1.35;
+  --line-height-base: 1.5;                 /* 段落 = 默认行高 + 3 */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+
+  /* ---------- 间距（Int UI 同样是 4 的倍数） ---------- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  /* ---------- 圆角（Component.arc = 8） ---------- */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 8px;
+  --radius-full: 999px;
+
+  /* ---------- 阴影（Int UI 主要靠描边，不用阴影） ---------- */
+  --shadow-sm: none;
+  --shadow-md: 0 4px 12px rgba(39, 40, 46, 0.18);
+
+  /* ---------- 控件尺寸（官方 minimumSize / rowHeight） ---------- */
+  --height-control-lg: 28px;               /* Button 与 TextField 的标准高度 */
+  --height-control-md: 24px;               /* List / Tree rowHeight */
+  --height-control-sm: 20px;
+  --border-width: 1px;
+  --content-max-width: 1120px;
+
+  /* ---------- Int UI 专用补充变量 ---------- */
+  --intui-btn-min-width: 72px;             /* Button.minimumSize = 72,28 */
+  --intui-row-height: 24px;                /* List.rowHeight / Tree.rowHeight */
+  --intui-tab-height: 40px;                /* TabbedPane.tabHeight */
+  --intui-tab-arc: 4px;                    /* TabbedPane.tabSelectionArc */
+  --intui-underline-height: 4px;           /* EditorTabs.underlineHeight */
+  --intui-selected-bg: #3574F0;            /* ToolWindow.Button.selectedBackground */
+  --intui-selected-fg: #FFFFFF;
+  --intui-gutter-fg: #818594;              /* 行号 / 次要标注 */
+  --intui-code-fg: #000000;
+  --intui-toolbar-bg: #F7F8FA;
+  --intui-popup-border: #B9BDC9;           /* Popup.borderColor */
+  --intui-onbanner-bg: #27282E;            /* GotItTooltip / Notification 深底 */
+  --intui-onbanner-fg: #C9CCD6;
+}
+
+/* Int UI 的按钮有最小宽度，文字不会挤在一起 */
+.theme-intui .ui-btn { min-width: var(--intui-btn-min-width); padding: 0 var(--space-3); }
+.theme-intui .ui-btn--pill { min-width: 0; border-radius: var(--radius-full); }
+
+/* Int UI 的列表行高固定 24，行内上下不加额外内边距 */
+.theme-intui .ui-list__item { padding: var(--space-1) var(--space-3); min-height: var(--intui-row-height); }
+.theme-intui .ui-table th,
+.theme-intui .ui-table td { padding: var(--space-1) var(--space-3); height: var(--intui-row-height); }
+
+/* 输入框底为白色，描边 #C9CCD6 */
+.theme-intui .ui-input,
+.theme-intui .ui-textarea,
+.theme-intui .ui-select { padding: 0 var(--space-2); }
+
+/* 顶栏与侧栏在 Int UI 里用面板色，不用白色 */
+.theme-intui .ui-appbar { background: var(--intui-toolbar-bg); }
+.theme-intui .ui-sidebar { background: var(--intui-toolbar-bg); }
+
+/* 卡片在 Int UI 里是描边式，没有阴影 */
+.theme-intui .ui-card { box-shadow: none; }
+
+/* 选中项用实心强调色 */
+.theme-intui .ui-list__item--active { background: var(--intui-selected-bg); color: var(--intui-selected-fg); }
+.theme-intui .ui-list__item--active .ui-list__sub,
+.theme-intui .ui-list__item--active .ui-list__meta { color: var(--color-brand-subtle); }
+</style>
+<style>/* ============================================================
+   组件库.css —— 可复用的界面组件
+   依赖：我的设计规范/assets/tokens.css（必须先加载）
+   硬约束：所有色值/字号/间距/圆角/阴影只引用 token，禁止写死数值
+   例外：仅在 token 未覆盖处使用「token + 透明度」派生值，并在注释中标注
+   ============================================================ */
+
+/* ---------- 基础 ---------- */
+.ui-scope {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-base);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
+}
+.ui-scope *, .ui-scope *::before, .ui-scope *::after { box-sizing: border-box; }
+.ui-divider { height: var(--border-width); background: var(--color-border-default); border: 0; margin: var(--space-4) 0; }
+
+/* ---------- 按钮 ---------- */
+.ui-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: var(--space-2);
+  height: var(--height-control-lg);
+  padding: 0 var(--space-5);
+  border-radius: var(--radius-md);
+  border: var(--border-width) solid transparent;
+  font-family: inherit;
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-medium);
+  line-height: 1;
+  cursor: pointer;
+  background: transparent;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+.ui-btn:focus-visible { outline: none; box-shadow: 0 0 0 var(--space-1) var(--color-brand-subtle); }
+.ui-btn--primary { background: var(--color-brand-primary); color: var(--color-text-on-brand); }
+.ui-btn--primary:hover { background: var(--color-brand-primary-hover); }
+.ui-btn--secondary { background: var(--color-bg-surface); color: var(--color-text-primary); border-color: var(--color-border-strong); }
+.ui-btn--secondary:hover { border-color: var(--color-text-secondary); }
+.ui-btn--ghost { background: transparent; color: var(--color-text-secondary); }
+.ui-btn--ghost:hover { background: var(--color-bg-subtle); color: var(--color-text-primary); }
+.ui-btn--danger { background: var(--color-danger); color: var(--color-text-on-brand); }
+.ui-btn--danger-subtle { background: var(--color-danger-subtle); color: var(--color-danger); }
+.ui-btn--sm { height: var(--height-control-md); padding: 0 var(--space-4); font-size: var(--font-size-caption); }
+.ui-btn--lg { height: var(--height-control-lg); padding: 0 var(--space-6); }
+.ui-btn[disabled] { background: var(--color-bg-subtle); color: var(--color-text-tertiary); border-color: transparent; cursor: not-allowed; }
+.ui-btn--block { width: 100%; }
+
+/* ---------- 表单 ---------- */
+.ui-field { display: block; margin-bottom: var(--space-4); }
+.ui-field__label { display: block; font-size: var(--font-size-caption); color: var(--color-text-secondary); margin-bottom: var(--space-2); }
+.ui-field__hint { font-size: var(--font-size-caption); color: var(--color-text-tertiary); margin-top: var(--space-2); }
+.ui-field__error { font-size: var(--font-size-caption); color: var(--color-danger); margin-top: var(--space-2); }
+
+.ui-input, .ui-textarea, .ui-select {
+  display: block; width: 100%;
+  height: var(--height-control-lg);
+  padding: 0 var(--space-3);
+  border: var(--border-width) solid var(--color-border-default);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-surface);
+  color: var(--color-text-primary);
+  font-family: inherit; font-size: var(--font-size-body);
+}
+.ui-input::placeholder, .ui-textarea::placeholder { color: var(--color-text-tertiary); }
+.ui-input:hover, .ui-textarea:hover, .ui-select:hover { border-color: var(--color-border-strong); }
+.ui-input:focus, .ui-textarea:focus, .ui-select:focus {
+  outline: none; border-color: var(--color-brand-primary);
+  box-shadow: 0 0 0 var(--space-1) var(--color-brand-subtle);
+}
+.ui-textarea { height: auto; min-height: var(--space-8); padding: var(--space-3); line-height: var(--line-height-base); resize: vertical; }
+.ui-select { appearance: none; padding-right: var(--space-6); background-image: none; }
+.ui-input--error, .ui-textarea--error { border-color: var(--color-danger); }
+
+/* 复选 / 单选 */
+.ui-check { display: flex; align-items: flex-start; gap: var(--space-2); margin-bottom: var(--space-3); cursor: pointer; }
+.ui-check input { margin: var(--space-1) 0 0; accent-color: var(--color-brand-primary); width: var(--space-4); height: var(--space-4); flex: 0 0 auto; }
+.ui-check__text { font-size: var(--font-size-body); }
+.ui-check__desc { display: block; font-size: var(--font-size-caption); color: var(--color-text-secondary); margin-top: var(--space-1); }
+
+/* 开关 */
+.ui-switch { display: flex; align-items: center; gap: var(--space-3); cursor: pointer; }
+.ui-switch input { position: absolute; opacity: 0; width: 0; height: 0; }
+.ui-switch__track { width: calc(var(--height-control-sm) * 2); height: var(--height-control-sm); border-radius: var(--radius-full); background: var(--color-border-strong); position: relative; flex: 0 0 auto; }
+.ui-switch__track::after {
+  content: ""; position: absolute; top: var(--space-1); left: var(--space-1);
+  width: calc(var(--height-control-sm) - var(--space-1) * 2);
+  height: calc(var(--height-control-sm) - var(--space-1) * 2);
+  border-radius: var(--radius-full); background: var(--color-bg-surface);
+}
+.ui-switch input:checked + .ui-switch__track { background: var(--color-brand-primary); }
+.ui-switch input:checked + .ui-switch__track::after { left: auto; right: var(--space-1); }
+.ui-switch input:focus-visible + .ui-switch__track { box-shadow: 0 0 0 var(--space-1) var(--color-brand-subtle); }
+.ui-switch__label { font-size: var(--font-size-body); }
+
+/* ---------- 标签 / 徽标 ---------- */
+.ui-chip {
+  display: inline-flex; align-items: center; gap: var(--space-1);
+  height: var(--height-control-sm); padding: 0 var(--space-3);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-caption);
+  background: var(--color-brand-subtle); color: var(--color-brand-primary);
+  white-space: nowrap;
+}
+.ui-chip--muted { background: var(--color-bg-subtle); color: var(--color-text-secondary); }
+.ui-chip--success { background: var(--color-success-subtle); color: var(--color-success); }
+.ui-chip--warning { background: var(--color-warning-subtle); color: var(--color-warning); }
+.ui-chip--danger { background: var(--color-danger-subtle); color: var(--color-danger); }
+.ui-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: var(--space-4); height: var(--space-4); padding: 0 var(--space-1);
+  border-radius: var(--radius-full);
+  background: var(--color-danger); color: var(--color-text-on-brand);
+  font-family: var(--font-family-number); font-size: var(--font-size-caption); line-height: 1;
+}
+
+/* ---------- 卡片 ---------- */
+.ui-card {
+  background: var(--color-bg-surface);
+  border: var(--border-width) solid var(--color-border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+.ui-card--flat { box-shadow: none; }
+.ui-card__head { padding: var(--space-4); border-bottom: var(--border-width) solid var(--color-border-subtle, var(--color-border-default)); font-weight: var(--font-weight-medium); }
+.ui-card__body { padding: var(--space-4); }
+.ui-card__foot { padding: var(--space-4); border-top: var(--border-width) solid var(--color-border-subtle, var(--color-border-default)); display: flex; gap: var(--space-3); justify-content: flex-end; }
+
+/* ---------- 列表 ---------- */
+.ui-list { list-style: none; margin: 0; padding: 0; }
+.ui-list__item {
+  display: flex; align-items: center; gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: var(--border-width) solid var(--color-border-subtle, var(--color-border-default));
+  font-size: var(--font-size-body);
+}
+.ui-list__item:last-child { border-bottom: 0; }
+.ui-list__item--active { background: var(--color-brand-subtle); color: var(--color-brand-primary); }
+.ui-list__item--clickable { cursor: pointer; }
+.ui-list__item--clickable:hover { background: var(--color-bg-subtle); }
+.ui-list__main { flex: 1; min-width: 0; }
+.ui-list__title { font-weight: var(--font-weight-medium); }
+.ui-list__sub { font-size: var(--font-size-caption); color: var(--color-text-secondary); margin-top: var(--space-1); }
+.ui-list__meta { font-size: var(--font-size-caption); color: var(--color-text-tertiary); font-family: var(--font-family-number); }
+
+/* ---------- 表格 ---------- */
+.ui-table { width: 100%; border-collapse: collapse; font-size: var(--font-size-body); }
+.ui-table th, .ui-table td { padding: var(--space-3) var(--space-4); text-align: left; border-bottom: var(--border-width) solid var(--color-border-subtle, var(--color-border-default)); }
+.ui-table th { font-size: var(--font-size-caption); font-weight: var(--font-weight-medium); color: var(--color-text-secondary); background: var(--color-bg-subtle); }
+.ui-table tbody tr:hover { background: var(--color-bg-page); }
+.ui-table .num { font-family: var(--font-family-number); text-align: right; }
+
+/* ---------- 应用外壳 ---------- */
+.ui-app { display: flex; flex-direction: column; background: var(--color-bg-page); border-radius: var(--radius-lg); overflow: hidden; border: var(--border-width) solid var(--color-border-default); }
+.ui-appbar {
+  display: flex; align-items: center; gap: var(--space-4);
+  height: calc(var(--space-8) - var(--space-2));
+  padding: 0 var(--space-4);
+  background: var(--color-bg-surface);
+  border-bottom: var(--border-width) solid var(--color-border-subtle, var(--color-border-default));
+  flex: 0 0 auto;
+}
+.ui-appbar__title { font-size: var(--font-size-h3); font-weight: var(--font-weight-medium); }
+.ui-appbar__spacer { flex: 1; }
+.ui-app-shell { display: flex; min-height: 0; flex: 1; }
+.ui-sidebar {
+  width: calc(var(--space-8) * 3);
+  flex: 0 0 auto;
+  background: var(--color-bg-surface);
+  border-right: var(--border-width) solid var(--color-border-default);
+  padding: var(--space-3) 0;
+}
+.ui-sidebar .ui-list__item { border-bottom: 0; border-radius: var(--radius-md); margin: 0 var(--space-2); padding: var(--space-2) var(--space-3); }
+.ui-main { flex: 1; min-width: 0; padding: var(--space-5); }
+
+/* ---------- 标签页 ---------- */
+.ui-tabs { display: flex; gap: var(--space-5); border-bottom: var(--border-width) solid var(--color-border-subtle, var(--color-border-default)); }
+.ui-tabs__item {
+  padding: var(--space-3) 0; font-size: var(--font-size-body);
+  color: var(--color-text-secondary); cursor: pointer;
+  border-bottom: var(--border-width) solid transparent;
+  margin-bottom: calc(var(--border-width) * -1);
+  background: none; border-left: 0; border-right: 0; border-top: 0; font-family: inherit;
+}
+.ui-tabs__item--active { color: var(--color-brand-primary); border-bottom-color: var(--color-brand-primary); font-weight: var(--font-weight-medium); }
+
+/* ---------- 提示条 ---------- */
+.ui-alert { display: flex; gap: var(--space-3); padding: var(--space-3) var(--space-4); border-radius: var(--radius-md); font-size: var(--font-size-body); }
+.ui-alert--info { background: var(--color-brand-subtle); color: var(--color-brand-primary); }
+.ui-alert--success { background: var(--color-success-subtle); color: var(--color-success); }
+.ui-alert--warning { background: var(--color-warning-subtle); color: var(--color-warning); }
+.ui-alert--danger { background: var(--color-danger-subtle); color: var(--color-danger); }
+.ui-alert__title { font-weight: var(--font-weight-medium); }
+
+/* ---------- 步骤条 ---------- */
+.ui-steps { display: flex; align-items: center; gap: var(--space-2); }
+.ui-steps__item { display: flex; align-items: center; gap: var(--space-2); font-size: var(--font-size-caption); color: var(--color-text-tertiary); }
+.ui-steps__dot {
+  width: var(--height-control-sm); height: var(--height-control-sm); border-radius: var(--radius-full);
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--color-bg-subtle); color: var(--color-text-tertiary);
+  font-family: var(--font-family-number); font-size: var(--font-size-caption); flex: 0 0 auto;
+}
+.ui-steps__item--done .ui-steps__dot { background: var(--color-success-subtle); color: var(--color-success); }
+.ui-steps__item--active .ui-steps__dot { background: var(--color-brand-primary); color: var(--color-text-on-brand); }
+.ui-steps__item--active { color: var(--color-brand-primary); font-weight: var(--font-weight-medium); }
+.ui-steps__line { width: var(--space-5); height: var(--border-width); background: var(--color-border-default); }
+
+/* ---------- 弹窗 ---------- */
+.ui-modal-overlay {
+  position: absolute; inset: 0;
+  background: rgba(26, 32, 44, 0.45); /* 派生自 --color-text-primary (#1A202C) + 透明度 */
+  display: flex; align-items: center; justify-content: center; padding: var(--space-5);
+}
+.ui-modal {
+  width: 100%; max-width: calc(var(--space-8) * 7);
+  background: var(--color-bg-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+.ui-modal__head { padding: var(--space-4) var(--space-5); border-bottom: var(--border-width) solid var(--color-border-subtle, var(--color-border-default)); font-size: var(--font-size-h3); font-weight: var(--font-weight-medium); }
+.ui-modal__body { padding: var(--space-5); }
+.ui-modal__foot { padding: var(--space-4) var(--space-5); border-top: var(--border-width) solid var(--color-border-subtle, var(--color-border-default)); display: flex; gap: var(--space-3); justify-content: flex-end; }
+
+/* ---------- 空状态 ---------- */
+.ui-empty { text-align: center; padding: var(--space-7) var(--space-5); color: var(--color-text-secondary); }
+.ui-empty__box {
+  width: var(--space-8); height: var(--space-8); margin: 0 auto var(--space-4);
+  border: var(--border-width) dashed var(--color-border-strong); border-radius: var(--radius-lg);
+  background: var(--color-bg-subtle);
+}
+.ui-empty__title { font-size: var(--font-size-h3); color: var(--color-text-primary); margin-bottom: var(--space-2); }
+.ui-empty__desc { font-size: var(--font-size-caption); }
+
+/* ---------- 头像 ---------- */
+.ui-avatar {
+  width: var(--height-control-md); height: var(--height-control-md); border-radius: var(--radius-full);
+  background: var(--color-brand-subtle); color: var(--color-brand-primary);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: var(--font-size-caption); font-weight: var(--font-weight-medium); flex: 0 0 auto;
+}
+
+/* ---------- 工具条 ---------- */
+.ui-toolbar { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); background: var(--color-bg-surface); border-bottom: var(--border-width) solid var(--color-border-subtle, var(--color-border-default)); }
+.ui-toolbar__spacer { flex: 1; }
+
+/* ---------- 进度 ---------- */
+.ui-progress { height: var(--space-2); border-radius: var(--radius-full); background: var(--color-bg-subtle); overflow: hidden; }
+.ui-progress__bar { height: 100%; background: var(--color-brand-primary); border-radius: var(--radius-full); }
+
+/* ---------- 键位 ---------- */
+.ui-kbd {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: var(--height-control-sm); height: var(--height-control-sm); padding: 0 var(--space-2);
+  border: var(--border-width) solid var(--color-border-default);
+  border-bottom-color: var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-surface);
+  font-family: var(--font-family-number); font-size: var(--font-size-caption);
+  color: var(--color-text-secondary);
+}
+
+/* ---------- 布局工具（只用 token 档位） ---------- */
+.ui-row { display: flex; align-items: center; gap: var(--space-3); }
+.ui-row--between { justify-content: space-between; }
+.ui-row--wrap { flex-wrap: wrap; }
+.ui-col { display: flex; flex-direction: column; gap: var(--space-3); }
+.ui-stack-4 > * + * { margin-top: var(--space-4); }
+.ui-stack-5 > * + * { margin-top: var(--space-5); }
+.ui-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-4); }
+.ui-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4); }
+.ui-prose { max-width: calc(var(--space-8) * 10); }
+.ui-muted { color: var(--color-text-secondary); }
+.ui-tertiary { color: var(--color-text-tertiary); }
+.ui-num { font-family: var(--font-family-number); }
+</style>
+<style>
+  body { margin: 0; background: #EDEFF3; }
+  .stage { padding: var(--space-6); display: flex; flex-direction: column; align-items: center; gap: var(--space-4); }
+
+  /* 下面这些是「截图外壳」，只服务于把界面框起来，不属于组件库 */
+  .ide {
+    width: 1000px; max-width: 100%; height: 620px;
+    display: flex; flex-direction: column;
+    background: #F7F8FA;
+    border: 1px solid #C9CCD6; border-radius: 8px; overflow: hidden;
+    box-shadow: 0 10px 32px rgba(39, 40, 46, 0.16);
+  }
+  .ide-titlebar {
+    height: 36px; flex: 0 0 auto; display: flex; align-items: center; gap: var(--space-3);
+    padding: 0 var(--space-3); border-bottom: 1px solid #DFE1E5;
+  }
+  .ide-titlebar__name { font-size: 12px; color: #6C707E; }
+  .ide-titlebar__spacer { flex: 1; }
+  .ide-titlebar__btn { width: 12px; height: 12px; border-radius: 2px; background: #C9CCD6; }
+  .ide-body { flex: 1; display: flex; min-height: 0; }
+  .ide-stripe {
+    width: 40px; flex: 0 0 auto; padding: var(--space-2) 0;
+    display: flex; flex-direction: column; align-items: center; gap: var(--space-2);
+    border-right: 1px solid #C9CCD6; background: #F7F8FA;
+  }
+  .ide-stripe i { width: 20px; height: 20px; border-radius: 4px; background: #C9CCD6; display: block; }
+  .ide-stripe i.on { background: #3574F0; }
+  .ide-side { width: 188px; flex: 0 0 auto; border-right: 1px solid #C9CCD6; background: #F7F8FA; padding: var(--space-2) 0; }
+  .ide-side h4 { font-size: 12px; font-weight: var(--font-weight-medium); color: #6C707E; margin: 0 0 var(--space-2); padding: 0 var(--space-3); }
+  .ide-main { flex: 1; min-width: 0; background: #FFFFFF; display: flex; flex-direction: column; }
+  .ide-content { flex: 1; overflow: auto; padding: var(--space-4); }
+  .ide-statusbar {
+    height: 24px; flex: 0 0 auto; display: flex; align-items: center; gap: var(--space-4);
+    padding: 0 var(--space-3); background: #F7F8FA; border-top: 1px solid #DFE1E5;
+    font-size: 12px; color: #818594;
+  }
+  .ide-statusbar__spacer { flex: 1; }
+
+  .panel-title { font-size: var(--font-size-h3); font-weight: var(--font-weight-medium); }
+  .divider-v { width: 1px; align-self: stretch; background: #DFE1E5; }
+
+  .credit {
+    font-size: 12px; color: #6C707E; text-align: center; max-width: 720px; margin: 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="ide theme-intui ui-scope" style="font-size:13px">
+
+    <div class="ide-titlebar">
+      <span class="ide-titlebar__name">订单中心 — 需求描述</span>
+      <span class="ide-titlebar__spacer"></span>
+      <span class="ide-titlebar__btn"></span>
+      <span class="ide-titlebar__btn"></span>
+      <span class="ide-titlebar__btn"></span>
+    </div>
+
+    <div class="ide-body">
+
+      <div class="ide-stripe">
+        <i class="on"></i><i></i><i></i><i></i><i></i>
+      </div>
+
+      <div class="ide-side">
+        <h4>工作区</h4>
+        <ul class="ui-list">
+          <li class="ui-list__item ui-list__item--active">新建任务</li>
+          <li class="ui-list__item ui-list__item--clickable">历史记录 <span class="ui-list__meta">18</span></li>
+          <li class="ui-list__item ui-list__item--clickable">我的模板</li>
+          <li class="ui-list__item ui-list__item--clickable">缺省设置</li>
+        </ul>
+      </div>
+
+      <div class="ide-main">
+
+        <div class="ui-toolbar">
+          <span class="panel-title">新建任务</span>
+          <span class="ui-chip ui-chip--muted">未保存</span>
+          <span class="ui-toolbar__spacer"></span>
+          <button class="ui-btn ui-btn--ghost ui-btn--sm">预览</button>
+          <button class="ui-btn ui-btn--secondary ui-btn--sm">存为模板</button>
+        </div>
+
+        <div class="ide-content">
+
+          <div class="ui-steps" style="margin-bottom:var(--space-5)">
+            <span class="ui-steps__item ui-steps__item--done"><span class="ui-steps__dot">1</span>描述任务</span>
+            <span class="ui-steps__line"></span>
+            <span class="ui-steps__item ui-steps__item--active"><span class="ui-steps__dot">2</span>补充约束</span>
+            <span class="ui-steps__line"></span>
+            <span class="ui-steps__item"><span class="ui-steps__dot">3</span>生成</span>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 260px;gap:var(--space-5)">
+
+            <div>
+              <label class="ui-field">
+                <span class="ui-field__label">你想让它做什么？</span>
+                <textarea class="ui-textarea" style="min-height:64px" placeholder="用一句话说，不用组织语言"></textarea>
+                <span class="ui-field__hint">写不完整没关系，下面两项会帮你补齐</span>
+              </label>
+
+              <label class="ui-field">
+                <span class="ui-field__label">结果给谁看？</span>
+                <input class="ui-input" value="给客户看" style="width:100%">
+              </label>
+
+              <label class="ui-field">
+                <span class="ui-field__label">有什么硬约束？</span>
+                <input class="ui-input ui-input--error" placeholder="字数、格式、不能出现的东西">
+                <span class="ui-field__error">这一项空着，AI 只能靠猜 —— 这是最常见的失败原因</span>
+              </label>
+
+              <div class="ui-row ui-row--wrap" style="margin-bottom:var(--space-5)">
+                <span class="ui-chip ui-chip--muted">不超过 200 字</span>
+                <span class="ui-chip ui-chip--muted">口语一点</span>
+                <span class="ui-chip ui-chip--muted">不要小标题</span>
+                <span class="ui-chip">+ 常用约束</span>
+              </div>
+            </div>
+
+            <div>
+              <div class="ui-card">
+                <div class="ui-card__head">缺口检查</div>
+                <div class="ui-card__body" style="padding:var(--space-2) var(--space-3)">
+                  <ul class="ui-list">
+                    <li class="ui-list__item" style="border-bottom:0">
+                      <span class="ui-chip ui-chip--success">已明确</span>
+                      <span class="ui-list__main">要做什么</span>
+                    </li>
+                    <li class="ui-list__item" style="border-bottom:0">
+                      <span class="ui-chip ui-chip--success">已明确</span>
+                      <span class="ui-list__main">给谁看</span>
+                    </li>
+                    <li class="ui-list__item" style="border-bottom:0">
+                      <span class="ui-chip ui-chip--warning">还缺</span>
+                      <span class="ui-list__main">硬约束</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="ui-alert ui-alert--info" style="margin-top:var(--space-3)">
+                <span>补上「硬约束」再生成，成功率会明显不同。</span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="ui-row" style="padding:var(--space-3) var(--space-4);border-top:1px solid #EBECF0">
+          <button class="ui-btn ui-btn--primary">生成</button>
+          <button class="ui-btn ui-btn--secondary">我还说不清</button>
+          <span class="ui-toolbar__spacer"></span>
+          <span style="font-size:12px;color:#818594">⌘↵ 直接生成</span>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="ide-statusbar">
+      <span>3 项检查 · 1 项待补</span>
+      <span class="ide-statusbar__spacer"></span>
+      <span>Int UI · Light</span>
+    </div>
+
+  </div>
+
+  <p class="credit">方案示意稿，非真实产品截图。界面基于 JetBrains Int UI Kit（CC BY 4.0）复刻，配色与结构已按本项目方案调整。</p>
+</div>
+
+</body>
+</html>

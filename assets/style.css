@@ -168,6 +168,22 @@ a:hover { color: var(--color-brand-primary-hover); }
 }
 .card-meta { display: flex; gap: var(--space-2); flex-wrap: wrap; }
 
+/* ---------- 界面稿 ---------- */
+.figure { margin: var(--space-6) 0 0; break-inside: avoid; }
+.figure img {
+  display: block;
+  width: 100%;
+  background: var(--color-bg-surface);
+  border: var(--border-width) solid var(--color-border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+.figure figcaption {
+  margin-top: var(--space-3);
+  font-size: var(--font-size-caption);
+  color: var(--color-text-tertiary);
+}
+
 /* ---------- 标签 ---------- */
 .chip {
   display: inline-flex;
