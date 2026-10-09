@@ -1,0 +1,15 @@
+# macOS 系统文件
+.DS_Store
+._*
+
+# 设计源文件（体积大，不放进版本库；导出后的图片才放进来）
+*.psd
+*.ai
+*.sketch
+*.fig
+*.xd
+
+# 供后续脚本使用的目录
+node_modules/
+.venv/
+__pycache__/

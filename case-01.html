@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>网盘 App 文件查找体验重设计 · 林知遥</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<header class="site-header no-print">
+  <div class="wrap">
+    <a class="brand" href="index.html">林知遥</a>
+    <nav class="nav">
+      <a href="index.html#work">返回项目列表</a>
+      <a class="btn btn-secondary btn-sm" href="index.html">上一页</a>
+    </nav>
+  </div>
+</header>
+
+<main class="case-body">
+
+  <div class="case-header">
+    <div class="wrap">
+      <p class="eyebrow">案例 01 · 体验重设计</p>
+      <h1>网盘 App 文件查找体验重设计</h1>
+      <p class="lead">
+        用户不是不知道文件在哪，而是不知道该用什么词去找。我们把检索入口从「文件名」换成「记忆线索」。
+      </p>
+
+      <dl class="meta-table">
+        <div><dt>我的角色</dt><dd>主导设计师（独立完成调研到交付）</dd></div>
+        <div><dt>时间跨度</dt><dd>8 周</dd></div>
+        <div><dt>团队构成</dt><dd>我 + 1 产品经理 + 3 开发</dd></div>
+        <div><dt>我的产出</dt><dd>调研报告、信息架构、交互稿、可用性复测</dd></div>
+      </dl>
+    </div>
+  </div>
+
+  <section class="case-section">
+    <div class="wrap">
+      <p class="num">01</p>
+      <h2>问题：搜索成功率长期停在 62%</h2>
+      <div class="prose">
+        <p>
+          上线两年，网盘的「搜索」是使用率第二高的功能，日均触发 12 次/人。
+          但后台数据显示：38% 的搜索会在 60 秒内被用户改写关键词——也就是说，第一次基本没找对。
+        </p>
+        <p>
+          更麻烦的是，越活跃的用户搜得越多、也越搜不准。他们文件太多，
+          记不住自己当初把文件命名成什么。
+        </p>
+      </div>
+      <div class="placeholder placeholder-lg" style="margin-top: var(--space-6);">
+        此处放：搜索失败率漏斗图（标注数据口径与时间范围）
+      </div>
+    </div>
+  </section>
+
+  <section class="case-section">
+    <div class="wrap">
+      <p class="num">02</p>
+      <h2>调研：8 次深访 + 30 份问卷 + 埋点分析</h2>
+      <div class="prose">
+        <p>
+          我约了 8 位重度用户（每周使用 5 次以上）做 45 分钟深访，
+          现场让他们「找出上个月发给客户的报价单」，全程录屏。
+        </p>
+        <p>
+          同时回收 30 份问卷，确认这些行为是否具有普遍性；再拉了一遍搜索埋点，
+          看失败集中在什么类型的文件上。
+        </p>
+      </div>
+      <div class="placeholder" style="margin-top: var(--space-6);">
+        此处放：访谈提纲 + 关键原话摘录（脱敏截图）
+      </div>
+    </div>
+  </section>
+
+  <section class="case-section">
+    <div class="wrap">
+      <p class="num">03</p>
+      <h2>洞察：用户记的是「场景」，不是「名字」</h2>
+      <ul class="insight-list">
+        <li><strong>线索优先于名称。</strong>8 人中有 6 人第一反应是回忆「我什么时候用的」「谁发给我的」，而不是文件名。</li>
+        <li><strong>目录结构是设计师的思维。</strong>用户根本不记得自己分在哪一层文件夹里，他们会用「好像在一个以 A 开头的文件夹」这种模糊描述。</li>
+        <li><strong>用户会照着需求原话去搜。</strong>有人直接输入「上周给客户的报价单」，把搜索框当成了人。</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="case-section">
+    <div class="wrap">
+      <p class="num">04</p>
+      <h2>策略：从「按名称检索」转向「按记忆线索检索」</h2>
+      <div class="prose">
+        <p>
+          既然用户记住的是时间、来源和场景，那搜索就不该只接受文件名。
+          我把检索拆成三条独立线索，让用户任选最清晰的一条开始。
+        </p>
+        <p>
+          约束是：不能动底层存储结构，改动必须在一个版本内上线，所以方案完全建立在现有索引之上。
+        </p>
+      </div>
+      <div class="placeholder" style="margin-top: var(--space-6);">
+        此处放：三条线索的信息架构图 + 竞品对比表
+      </div>
+    </div>
+  </section>
+
+  <section class="case-section">
+    <div class="wrap">
+      <p class="num">05</p>
+      <h2>方案：时间轴、来源聚合、自然语言联想</h2>
+      <div class="prose">
+        <p>
+          搜索页默认展示「最近使用」时间轴，用户可以直接按「上周三」定位，
+          不用输入任何文字。
+        </p>
+        <p>
+          第二条路径是「谁发我的」，把文件按发送方聚合，找回协作文件的时间从
+          平均 4 步操作降到 1 步。第三条是在搜索框里做整句意图识别，
+          把「上周给客户的报价单」拆成时间 + 对象 + 文件类型三个条件。
+        </p>
+      </div>
+
+      <div class="grid" style="margin-top: var(--space-6);">
+        <div class="placeholder">此处放：时间轴视图高保真稿</div>
+        <div class="placeholder">此处放：来源聚合视图高保真稿</div>
+        <div class="placeholder">此处放：整句搜索交互流程</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="case-section">
+    <div class="wrap">
+      <p class="num">06</p>
+      <h2>结果与反思</h2>
+      <div class="prose">
+        <p>
+          上线后第 4 周，我们做了一轮 12 人的可用性复测，同一批任务的平均完成时间
+          从 48 秒降到 19 秒；搜索改写率从 38% 降到 21%。
+        </p>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat">
+          <div class="value">-60%</div>
+          <div class="label">找文件平均耗时（48s → 19s，n=12）</div>
+        </div>
+        <div class="stat">
+          <div class="value">21%</div>
+          <div class="label">搜索改写率（原 38%）</div>
+        </div>
+        <div class="stat">
+          <div class="value">+1.4x</div>
+          <div class="label">搜索功能周使用频次</div>
+        </div>
+      </div>
+
+      <div class="prose" style="margin-top: var(--space-6);">
+        <p>
+          <strong>如果重来一次：</strong>我会在调研阶段就拉上研发一起看埋点，
+          而不是等方案定稿才发现部分索引字段没有埋点，导致第二条线索延后一个版本上线。
+        </p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>林知遥 · UX 设计师作品集</span>
+    <span>hi@example.com</span>
+  </div>
+</footer>
+
+</body>
+</html>
